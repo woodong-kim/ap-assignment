@@ -22,9 +22,27 @@ public class CategoryService {
     public List<CategoryResponse> getCategoryList() {
 
         List<Category> categories = categoryRepository.findAll();
+//        List<CategoryResponse> categoryResList = categories.stream()
+//                .map(category -> response(category))
+//                .collect(Collectors.toList());
+
         List<CategoryResponse> categoryResList = categories.stream()
-                .map(category -> response(category))
+                .map(category -> {
+                    String categoryName = category.getCategoryName();
+                    if (category.getDepth() > 1) {
+                        for (Category parentCategory : categories) {
+                            if (category.getParentNo() == parentCategory.getId()) {
+                                categoryName = parentCategory.getCategoryName() + "-" + categoryName;
+                            }
+                        }
+                    }
+                    return CategoryResponse.builder()
+                            .id(category.getId())
+                            .categoryName(categoryName)
+                            .build();
+                })
                 .collect(Collectors.toList());
+
 
         return categoryResList;
     }
