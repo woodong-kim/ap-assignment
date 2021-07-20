@@ -29,10 +29,13 @@ public class CategoryService {
         return categoryResList;
     }
 
-    public CategoryResponse getCategory(Integer id) {
-        Optional<Category> categoryOptional = categoryRepository.findById(id);
+    public CategoryResponse getCategoryInfo(Integer id) {
+        Optional<Category> categoryOptional = getCategory(id);
         return response(categoryOptional.orElseGet(Category::new));
+    }
 
+    public Optional<Category> getCategory(Integer id) {
+        return categoryRepository.findById(id);
     }
 
     private CategoryResponse response(Category category) {

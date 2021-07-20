@@ -21,8 +21,9 @@ public class ProductApiController {
     private final CategoryService categoryService;
 
     @GetMapping("/{id}")
-    public List<Product> getProductList() {
+    public List<Product> getProductInfo() {
         return productService.getProductList();
     }
+
 
 }
