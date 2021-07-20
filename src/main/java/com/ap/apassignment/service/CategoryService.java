@@ -1,0 +1,48 @@
+package com.ap.apassignment.service;
+
+
+import com.ap.apassignment.domain.dto.CategoryResponse;
+import com.ap.apassignment.domain.entity.Category;
+import com.ap.apassignment.repository.CategoryRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class CategoryService {
+
+    private final CategoryRepository categoryRepository;
+
+    public List<CategoryResponse> getCategoryList() {
+
+        List<Category> categories = categoryRepository.findAll();
+        List<CategoryResponse> categoryResList = categories.stream()
+                .map(category -> response(category))
+                .collect(Collectors.toList());
+
+        return categoryResList;
+    }
+
+    public CategoryResponse getCategory(Integer id) {
+        Optional<Category> categoryOptional = categoryRepository.findById(id);
+        return response(categoryOptional.orElseGet(Category::new));
+
+    }
+
+    private CategoryResponse response(Category category) {
+
+        CategoryResponse categoryResponse = CategoryResponse.builder()
+                .id(category.getId())
+                .categoryName(category.getCategoryName())
+                .build();
+
+        return categoryResponse;
+    }
+
+}
