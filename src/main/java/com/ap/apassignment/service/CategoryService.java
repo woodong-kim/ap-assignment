@@ -1,6 +1,7 @@
 package com.ap.apassignment.service;
 
 
+import com.ap.apassignment.domain.dto.CategoryRequest;
 import com.ap.apassignment.domain.dto.CategoryResponse;
 import com.ap.apassignment.domain.entity.Category;
 import com.ap.apassignment.repository.CategoryRepository;
@@ -55,6 +56,20 @@ public class CategoryService {
     public Optional<Category> getCategory(Integer id) {
         return categoryRepository.findById(id);
     }
+
+    public CategoryResponse updateCategory(CategoryRequest categoryRequest) {
+
+        CategoryResponse categoryResponse = null;
+        Optional<Category> optionalCategory = categoryRepository.findById(categoryRequest.getId());
+        if (optionalCategory.isPresent()) {
+            Category category = optionalCategory.get();
+            category.setCategoryName(categoryRequest.getCategoryName());
+            return response(categoryRepository.save(category));
+        }
+
+        return categoryResponse;
+    }
+
 
     private CategoryResponse response(Category category) {
 

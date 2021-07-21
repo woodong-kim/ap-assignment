@@ -3,6 +3,7 @@ package com.ap.apassignment.domain.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.lang.Nullable;
 
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @ToString(of = {"id","categoryName","parentNo","depth"})

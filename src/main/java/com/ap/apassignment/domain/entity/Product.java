@@ -2,12 +2,14 @@ package com.ap.apassignment.domain.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Getter
+@Setter
 @Entity
 @NoArgsConstructor
 @ToString(of = {"id","brandName","productName","productPrice"})

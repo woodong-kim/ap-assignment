@@ -1,6 +1,7 @@
 package com.ap.apassignment.controller;
 
 
+import com.ap.apassignment.domain.dto.CategoryRequest;
 import com.ap.apassignment.domain.dto.CategoryResponse;
 import com.ap.apassignment.domain.dto.ProductResponse;
 import com.ap.apassignment.domain.entity.Category;
@@ -9,11 +10,12 @@ import com.ap.apassignment.service.CategoryService;
 import com.ap.apassignment.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -51,5 +53,19 @@ public class CategoryApiController {
 
         return productList;
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity updateCategory(@Valid CategoryRequest categoryRequest, BindingResult bindingResult) {
+
+        log.info("########  updateCategory : " + categoryRequest.toString());
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
+        }
+
+        CategoryResponse categoryResponse = categoryService.updateCategory(categoryRequest);
+
+        return ResponseEntity.ok(categoryResponse);
+    }
+
 
 }
