@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -22,6 +21,9 @@ public class CacheImpl implements Cache{
     private final String CACHE_KEY = "category";
     private final Map<String, List<CategoryResponse>> categoryCache = new ConcurrentHashMap<>();
 
+    /**
+     * 초기 구동시에 데이터를 원본 데이터베이스로부터 loading
+     */
     @PostConstruct
     public void loadCategoryCache() {
         findCategoryCache();
