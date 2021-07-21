@@ -5,9 +5,7 @@ import com.ap.apassignment.domain.dto.CategoryRequest;
 import com.ap.apassignment.domain.dto.CategoryResponse;
 import com.ap.apassignment.domain.dto.ProductResponse;
 import com.ap.apassignment.domain.entity.Category;
-import com.ap.apassignment.service.Cache;
-import com.ap.apassignment.service.CategoryService;
-import com.ap.apassignment.service.ProductService;
+import com.ap.apassignment.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -55,7 +53,7 @@ public class CategoryApiController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity updateCategory(@Valid CategoryRequest categoryRequest, BindingResult bindingResult) {
+    public ResponseEntity updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryRequest categoryRequest, BindingResult bindingResult) {
 
         log.info("########  updateCategory : " + categoryRequest.toString());
         if (bindingResult.hasErrors()) {
@@ -64,6 +62,22 @@ public class CategoryApiController {
 
         CategoryResponse categoryResponse = categoryService.updateCategory(categoryRequest);
 
+        return ResponseEntity.ok(categoryResponse);
+    }
+
+    @PostMapping("")
+    public ResponseEntity createCategory(@Valid @RequestBody CategoryRequest categoryRequest, BindingResult bindingResult) {
+
+        log.info("########  createCategory : " + categoryRequest.toString());
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
+        }
+
+        CategoryResponse categoryResponse = categoryService.createCategory(categoryRequest);
+        if (categoryResponse == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Category is Exist");
+        }
         return ResponseEntity.ok(categoryResponse);
     }
 

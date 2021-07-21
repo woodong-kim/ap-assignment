@@ -1,84 +1,21 @@
 package com.ap.apassignment.service;
 
-
 import com.ap.apassignment.domain.dto.CategoryRequest;
 import com.ap.apassignment.domain.dto.CategoryResponse;
 import com.ap.apassignment.domain.entity.Category;
-import com.ap.apassignment.repository.CategoryRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-@Slf4j
-@Service
-@RequiredArgsConstructor
-public class CategoryService {
+public interface CategoryService {
 
-    private final CategoryRepository categoryRepository;
+    List<CategoryResponse> getCategoryList();
 
-    public List<CategoryResponse> getCategoryList() {
+    CategoryResponse getCategoryInfo(Integer id);
 
-        List<Category> categories = categoryRepository.findAll();
-//        List<CategoryResponse> categoryResList = categories.stream()
-//                .map(category -> response(category))
-//                .collect(Collectors.toList());
+    Optional<Category> getCategory(Integer id);
 
-        List<CategoryResponse> categoryResList = categories.stream()
-                .map(category -> {
-                    String categoryName = category.getCategoryName();
-                    if (category.getDepth() > 1) {
-                        for (Category parentCategory : categories) {
-                            if (category.getParentNo() == parentCategory.getId()) {
-                                categoryName = parentCategory.getCategoryName() + "-" + categoryName;
-                            }
-                        }
-                    }
-                    return CategoryResponse.builder()
-                            .id(category.getId())
-                            .categoryName(categoryName)
-                            .build();
-                })
-                .collect(Collectors.toList());
+    CategoryResponse updateCategory(CategoryRequest categoryRequest);
 
-
-        return categoryResList;
-    }
-
-    public CategoryResponse getCategoryInfo(Integer id) {
-        Optional<Category> categoryOptional = getCategory(id);
-        return response(categoryOptional.orElseGet(Category::new));
-    }
-
-    public Optional<Category> getCategory(Integer id) {
-        return categoryRepository.findById(id);
-    }
-
-    public CategoryResponse updateCategory(CategoryRequest categoryRequest) {
-
-        CategoryResponse categoryResponse = null;
-        Optional<Category> optionalCategory = categoryRepository.findById(categoryRequest.getId());
-        if (optionalCategory.isPresent()) {
-            Category category = optionalCategory.get();
-            category.setCategoryName(categoryRequest.getCategoryName());
-            return response(categoryRepository.save(category));
-        }
-
-        return categoryResponse;
-    }
-
-
-    private CategoryResponse response(Category category) {
-
-        CategoryResponse categoryResponse = CategoryResponse.builder()
-                .id(category.getId())
-                .categoryName(category.getCategoryName())
-                .build();
-
-        return categoryResponse;
-    }
-
+    CategoryResponse createCategory(CategoryRequest categoryRequest);
 }

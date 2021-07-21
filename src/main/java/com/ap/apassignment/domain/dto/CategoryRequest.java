@@ -21,4 +21,9 @@ public class CategoryRequest {
     @NotBlank(message = "categoryName 값이 비어 있습니다.")
     private String categoryName;
 
+    private Integer parentNo;
+
+    private Integer depth;
+
+
 }
