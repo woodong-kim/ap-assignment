@@ -91,6 +91,18 @@ public class CategoryServiceImpl implements CategoryService{
 
     }
 
+    @Override
+    public boolean deleteCategory(Integer id) {
+        boolean result = false;
+        Optional<Category> optionalCategory = categoryRepository.findById(id);
+        if (optionalCategory.isPresent()) {
+            Category category = optionalCategory.get();
+            categoryRepository.delete(category);
+            result = true;
+        }
+        return result;
+    }
+
 
     private CategoryResponse response(Category category) {
 

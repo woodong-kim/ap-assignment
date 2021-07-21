@@ -52,19 +52,6 @@ public class CategoryApiController {
         return productList;
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryRequest categoryRequest, BindingResult bindingResult) {
-
-        log.info("########  updateCategory : " + categoryRequest.toString());
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
-        }
-
-        CategoryResponse categoryResponse = categoryService.updateCategory(categoryRequest);
-
-        return ResponseEntity.ok(categoryResponse);
-    }
-
     @PostMapping("")
     public ResponseEntity createCategory(@Valid @RequestBody CategoryRequest categoryRequest, BindingResult bindingResult) {
 
@@ -81,5 +68,29 @@ public class CategoryApiController {
         return ResponseEntity.ok(categoryResponse);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity updateCategory(@PathVariable Integer id, @Valid @RequestBody CategoryRequest categoryRequest, BindingResult bindingResult) {
+
+        log.info("########  updateCategory : " + categoryRequest.toString());
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(bindingResult.getAllErrors());
+        }
+
+        CategoryResponse categoryResponse = categoryService.updateCategory(categoryRequest);
+
+        return ResponseEntity.ok(categoryResponse);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deleteCategory(@PathVariable Integer id) {
+
+        log.info("########  deleteCategory ");
+        boolean deleteCategory = categoryService.deleteCategory(id);
+        if (! deleteCategory) {
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("Category delete Fail");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("Delete OK");
+    }
 
 }

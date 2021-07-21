@@ -18,4 +18,6 @@ public interface CategoryService {
     CategoryResponse updateCategory(CategoryRequest categoryRequest);
 
     CategoryResponse createCategory(CategoryRequest categoryRequest);
+
+    boolean deleteCategory(Integer id);
 }
